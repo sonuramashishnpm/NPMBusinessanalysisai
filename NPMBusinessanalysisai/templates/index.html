@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>NPM A.I</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="{{url_for('static',filename='bai.css')}}">
+  <link rel="icon" href="{{url_for('static', filename='npmai.png')}}" type="image/png">
+</head>
+<body>
+  <header class="header">NPM A.I.</header>
+
+  <video autoplay muted loop id="background-video">
+    <source src="{{url_for('static',filename='npmaivideo.mp4')}}" type="video/mp4">
+  </video>
+
+  <div id="video-overlay"></div>
+
+  <h2>NPM A.I — Ask Anything</h2>
+
+  <p style="text-align:center; margin-top:10px;">AI Response:</p>
+  <div id="response" role="status" aria-live="polite">Response</div>
+
+  <input type="text" id="userInput" placeholder="Type your question here..." required />
+  <button id="sendBtn">Send</button>
+
+  <script>
+    document.getElementById("sendBtn").addEventListener("click", async () => {
+      const userInput = document.getElementById("userInput").value.trim();
+      const responseBox = document.getElementById("response");
+
+      if (!userInput) {
+        responseBox.textContent = "Please type something.";
+        return;
+      }
+
+      responseBox.textContent = "Processing... ⏳";
+
+      try {
+        const res = await fetch("/askAI", {
+          method: "POST",
+          headers: {"Content-Type": "application/json"},
+          body: JSON.stringify({userInput: userInput})
+        });
+        if (!res.ok) {
+          const errText = await res.text();
+          responseBox.textContent = "Server Error: " + errText;
+          return;
+        }
+        const data = await res.json();
+        responseBox.textContent = data.response;
+      } catch (err) {
+        responseBox.textContent = "Error: " + err.message;
+      }
+    });
+  </script>
+</body>
+</html>
