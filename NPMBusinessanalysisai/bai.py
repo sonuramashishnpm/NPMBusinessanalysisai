@@ -18,9 +18,11 @@ def askAI():
 
     # Load Hugging Face LLM
     llm = HuggingFaceHub(
-        repo_id="tiiuae/falcon-7b-instruct",  # lightweight and free
-        model_kwargs={"temperature": 0.6, "max_length": 512}
-    )
+    repo_id="tiiuae/falcon-7b-instruct",
+    huggingfacehub_api_token="hf_your_real_api_key_here",
+    model_kwargs={"temperature": 0.6, "max_length": 512}
+)
+
 
     prompt = PromptTemplate(
         input_variables=["user_input"],
