@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, jsonify
 from langchain_community.llms import HuggingFaceHub
 from langchain.prompts import PromptTemplate
+from npmai import Gemini
 
 app = Flask(__name__)
 
@@ -17,11 +18,7 @@ def askAI():
         return jsonify({"response": "No input provided"}), 400
 
     # Load Hugging Face LLM
-    llm = HuggingFaceHub(
-    repo_id="tiiuae/falcon-7b-instruct",
-    huggingfacehub_api_token="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",
-    model_kwargs={"temperature": 0.6, "max_length": 512}
-)
+    llm=Gemini()
 
 
     prompt = PromptTemplate(
@@ -31,8 +28,8 @@ You are BusinessAnalystAI, an advanced system built using Google Gemini AI Mode.
 """
     )
 
-    final_prompt = prompt.format(user_input=user_input)
-    response = llm.invoke(final_prompt)
+    prompts = prompt.format(user_input=user_input)
+    response = llm.invoke(prompts)
 
     return jsonify({"response": response})
 
