@@ -1,7 +1,8 @@
 from langchain.prompts import PromptTemplate
-from npmai import Gemini
+from npmai import Gemini,GeminiAIMode,Grok,Perplexity,ChatGPT,Mistral
 
-llm=Gemini()
+llms=input("Enter A.I from which you want to use  so select and write exact from here:-{'ChatGPT','Grok','Perplexity','Gemini','GeminiAIMode','Mistral'}:")
+llm=globals()[llms]()
 
 prompt = PromptTemplate(
     input_variables=["user_input"],
