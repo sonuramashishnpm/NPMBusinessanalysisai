@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Business Analyst AI</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #0f172a;
+      color: white;
+      padding: 20px;
+    }
+    textarea, select, button {
+      width: 100%;
+      margin-top: 10px;
+      padding: 10px;
+      font-size: 16px;
+    }
+    button {
+      background: #22c55e;
+      border: none;
+      cursor: pointer;
+    }
+    pre {
+      background: #020617;
+      padding: 15px;
+      margin-top: 20px;
+      white-space: pre-wrap;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>BusinessAnalystAI (Frontend)</h2>
+
+  <textarea id="input" rows="6" placeholder="Describe your business workflow..."></textarea>
+
+  <button onclick="runAI()">Analyze</button>
+
+  <pre id="output">AI response will appear here...</pre>
+
+  <script>
+    async function runAI() {
+      const userInput = document.getElementById("input").value;
+      const output = document.getElementById("output");
+
+      output.textContent = "Thinking...";
+
+      const prompt = `
+You are BusinessAnalystAI, an advanced system.
+
+CORE OBJECTIVES:
+1. Understand and analyze the entire workflow
+2. Identify inefficiencies
+3. Recommend AI automation
+4. Optimize costs
+5. Suggest tools
+6. Provide actionable steps
+
+USER DESCRIPTION:
+${userInput}
+
+End with "Next Action Plan".
+      `;
+
+      try {
+        const res = await fetch("https://npm-api.onrender.com/llm", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            prompt: prompt,
+            model: "llama3.2",
+            temperature:0.9
+          })
+        });
+
+        const data = await res.json();
+        output.textContent = data.response || JSON.stringify(data, null, 2);
+
+      } catch (err) {
+        output.textContent = "Error: " + err.message;
+      }
+    }
+  </script>
+
+</body>
+</html>
