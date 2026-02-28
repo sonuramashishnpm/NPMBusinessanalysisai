@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>NPM Business Analysis A.I</title>
+  <link rel="stylesheet" href="NPMaistyle.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+  <header class="header">NPM Business Analysis A.I</header>
+
+  <video autoplay muted loop id="background-video">
+    <source src="https://npmexplorer.netlify.app/NPM%20ai%20backgrond%20video.mp4" type="video/mp4">
+  </video>
+  <div id="video-overlay"></div>
+
+  <h2>NPM Business Analysis A.I</h2>
+
+
+  <div id="chat-box" style="height: 400px; overflow-y: auto; padding: 10px; border: 1px solid #ccc; background: rgba(0,0,0,0.5); color: white; white-space: pre-wrap;">
+  </div>
+
+  <div class="stickdiv">
+    <input type="text" id="userInput" placeholder="Type your question here..." />
+    <button onclick="askAI()">Send</button>
+  </div> 
+
+<script>
+  async function askAI() {
+      const userInput = document.getElementById("userInput").value;
+      const output = document.getElementById("chat-box");
+
+      output.textContent = "Thinking...";
+
+      const prompt = `
+You are NPM BusinessAnalystAI, an advanced system.
+
+CORE OBJECTIVES:
+1. Understand and analyze the entire workflow
+2. Identify inefficiencies
+3. Recommend AI automation
+4. Optimize costs
+5. Suggest tools
+6. Provide actionable steps
+
+USER DESCRIPTION:
+${userInput}
+
+End with "Next Action Plan".
+      `;
+
+      try {
+        const res = await fetch("https://sonuramashish22028704-npmai.hf.space/llm", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            prompt: prompt,
+            temperature:0.5
+          })
+        });
+
+        const data = await res.json();
+        output.textContent = data.response || JSON.stringify(data, null, 2);
+
+      } catch (err) {
+        output.textContent = "Error: " + err.message;
+      }
+    }
+
+</script>
+</body>
+</html>
